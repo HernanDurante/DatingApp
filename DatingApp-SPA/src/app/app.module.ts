@@ -1,3 +1,5 @@
+import { PreventUnsavedChanges } from './guards/prevent-unsaved-changes.guard';
+import { MemberEditResolver } from './resolvers/member-edit.resolver';
 import { MemberListResolver } from './resolvers/member-list.resolver';
 import { MemberDetailResolver } from './resolvers/member-detail.resolver';
 
@@ -10,6 +12,8 @@ import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
 import { JwtModule } from '@auth0/angular-jwt';
 import { RouterModule } from '@angular/router';
 import { NgxGalleryModule } from 'ngx-gallery';
+import { FileUploadModule } from 'ng2-file-upload';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +31,8 @@ import { appRoutes } from './routes';
 import { MemberCardComponent } from './components/members/member-card/member-card.component';
 import { environment } from 'src/environments/environment';
 import { MemberDetailComponent } from './components/members/member-detail/member-detail.component';
+import { MemberEditComponent } from './components/members/member-edit/member-edit.component';
+import { PhotoEditorComponent } from './components/members/photo-editor/photo-editor.component';
 
 
 export function tokenGetter() {
@@ -45,7 +51,9 @@ export function tokenGetter() {
       ListsComponent,
       MessagesComponent,
       MemberCardComponent,
-      MemberDetailComponent
+      MemberDetailComponent,
+      MemberEditComponent,
+      PhotoEditorComponent
    ],
    imports: [
       BrowserModule,
@@ -56,6 +64,7 @@ export function tokenGetter() {
       TabsModule.forRoot(),
       RouterModule.forRoot(appRoutes),
       NgxGalleryModule,
+      FileUploadModule,
       JwtModule.forRoot({
          config: {
             tokenGetter: tokenGetter,
@@ -69,8 +78,10 @@ export function tokenGetter() {
       ErrorInterceptorProvider,
       AlertifyService,
       AuthGuard,
+      PreventUnsavedChanges,
       MemberDetailResolver,
       MemberListResolver,
+      MemberEditResolver,
       UserService
    ],
    bootstrap: [
