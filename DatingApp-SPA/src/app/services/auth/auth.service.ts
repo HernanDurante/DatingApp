@@ -1,4 +1,4 @@
-import { User } from 'src/app/models/user';
+import { User } from './../../models/user';
 import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -10,7 +10,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  apiUrl =  environment.apiUrl + 'auth/';
+  apiUrl = environment.apiUrl + 'auth/';
   jwtHelper = new JwtHelperService();
   decodedToken: any;
   currentUser: User;
@@ -23,8 +23,9 @@ export class AuthService {
     this.photoUrl.next(photoUrl);
   }
 
-  login(model: any) {
-    return this.http.post(`${this.apiUrl}login`, model).pipe( // Needed to use rxjs operators
+  login(model: User) {
+    return this.http.post(`${this.apiUrl}login`, model).pipe(
+      // Needed to use rxjs operators
       map((response: any) => {
         const user = response;
         if (user) {
@@ -38,7 +39,7 @@ export class AuthService {
     );
   }
 
-  register(model: any) {
+  register(model: User) {
     return this.http.post(this.apiUrl + 'register', model);
   }
 
@@ -60,5 +61,4 @@ export class AuthService {
       this.decodedToken = this.jwtHelper.decodeToken(token);
     }
   }
-
 }
