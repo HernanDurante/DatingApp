@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DatingApp.API.Helpers;
 using DatingApp.API.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,6 +32,36 @@ namespace DatingApp.API.Data
             var user = await _ctx.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.Id == id);
             return user;
         }
+        public async Task<PagedList<User>> GetUsers(UserParams userParams)
+        {
+            var users = _ctx.Users.Include(p => p.Photos).OrderByDescending(u => u.LastActive).AsQueryable();
+
+            users = users.Where(x => x.Id != userParams.UserId);
+            users = users.Where(x => x.Gender == userParams.Gender);
+            
+            if(userParams.MinAge != 18 || userParams.MaxAge != 99)
+            {
+                var minDob = DateTime.Today.AddYears(-userParams.MinAge - 1);
+                var maxDob = DateTime.Today.AddYears(-userParams.MaxAge);
+
+                users = users.Where(x => x.DateOfBirth >= minDob && x.DateOfBirth <= maxDob);
+            }
+
+            if(!string.IsNullOrEmpty(userParams.OrderBy))
+            {
+                switch (userParams.OrderBy)
+                {
+                    case "created":
+                        users = users.OrderByDescending(u => u.Created);
+                        break;
+                    default:
+                        users = users.OrderByDescending(u => u.LastActive);
+                        break;
+                }
+            }
+
+            return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
+        }
 
         public async Task<Photo> GetPhoto(int photoId)
         {
@@ -41,15 +73,10 @@ namespace DatingApp.API.Data
         {
             return await _ctx.Photos.Where(x => x.UserId == userId).FirstOrDefaultAsync(x => x.IsMain);
         }
-        public async Task<IEnumerable<User>> GetUsers()
-        {
-            var users = await _ctx.Users.Include(p => p.Photos).ToListAsync();
-            return users;
-        }
-
         public async Task<bool> SaveAll()
         {
             return await _ctx.SaveChangesAsync() > 0;
         }
+
     }
 }
