@@ -34,6 +34,7 @@ import { environment } from 'src/environments/environment';
 import { MemberDetailComponent } from './components/members/member-detail/member-detail.component';
 import { MemberEditComponent } from './components/members/member-edit/member-edit.component';
 import { PhotoEditorComponent } from './components/members/photo-editor/photo-editor.component';
+import { ListResolver } from './resolvers/lists.resolver';
 
 
 export function tokenGetter() {
@@ -88,6 +89,7 @@ export function tokenGetter() {
     MemberDetailResolver,
     MemberListResolver,
     MemberEditResolver,
+    ListResolver,
     UserService
   ],
   bootstrap: [AppComponent]

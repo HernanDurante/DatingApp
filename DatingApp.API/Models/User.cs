@@ -19,7 +19,9 @@ namespace DatingApp.API.Models
         public string Interests { get; set; }  
         public string Country { get; set; }
         public string City { get; set; }
-        public ICollection<Photo> Photos { get; set; }
+        public ICollection<Photo> Photos { get; set; } //One to many
+        public ICollection<Like> Likers { get; set; } //Many to Many
+        public ICollection<Like> Likees { get; set; } //Many to Many
 
     }
 }
