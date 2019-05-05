@@ -5,30 +5,42 @@ using DatingApp.API.Models;
 
 namespace DatingApp.API.Helpers
 {
-    public class AutoMapperProfiles : Profile 
+    public class AutoMapperProfiles : Profile
     {
-        public AutoMapperProfiles() 
+        public AutoMapperProfiles()
         {
-            CreateMap<User,UserForListDto>()
-                .ForMember(dest => dest.PhotoUrl, opt => {
+            CreateMap<User, UserForListDto>()
+                .ForMember(dest => dest.PhotoUrl, opt =>
+                {
                     opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url);
                 })
-                .ForMember(dest => dest.Age, opt => {
+                .ForMember(dest => dest.Age, opt =>
+                {
                     opt.MapFrom(d => d.DateOfBirth.CalculateAge());
                 });
 
-            CreateMap<User,UserForDetailDto>()
-                .ForMember(dest => dest.PhotoUrl, opt => {
+            CreateMap<User, UserForDetailDto>()
+                .ForMember(dest => dest.PhotoUrl, opt =>
+                {
                     opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url);
                 })
-                .ForMember(dest => dest.Age, opt => {
+                .ForMember(dest => dest.Age, opt =>
+                {
                     opt.MapFrom(d => d.DateOfBirth.CalculateAge());
                 });
-                
+
+            CreateMap<Message, MessageToReturnDto>()
+                .ForMember(m => m.SenderPhotoUrl, options => options
+                    .MapFrom(u => u.Sender.Photos.FirstOrDefault(p => p.IsMain).Url))
+                .ForMember(m => m.RecipientPhotoUrl, options => options
+                    .MapFrom(u => u.Recipient.Photos.FirstOrDefault(p => p.IsMain).Url));
+
             CreateMap<Photo, PhotosForDetailedDto>();
             CreateMap<UserForUpdateDto, User>();
             CreateMap<PhotoForCreationDto, Photo>();
             CreateMap<UserForRegisterDto, User>();
+            CreateMap<MessageForCreationDto, Message>().ReverseMap();
+
         }
     }
 }

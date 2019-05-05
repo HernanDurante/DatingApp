@@ -2,6 +2,8 @@ import { PreventUnsavedChanges } from './guards/prevent-unsaved-changes.guard';
 import { MemberEditResolver } from './resolvers/member-edit.resolver';
 import { MemberListResolver } from './resolvers/member-list.resolver';
 import { MemberDetailResolver } from './resolvers/member-detail.resolver';
+import { ListResolver } from './resolvers/lists.resolver';
+import { MessagesResolver } from './resolvers/messages.resolver';
 
 import { AuthGuard } from './guards/auth.guard';
 import { BrowserModule } from '@angular/platform-browser';
@@ -34,7 +36,8 @@ import { environment } from 'src/environments/environment';
 import { MemberDetailComponent } from './components/members/member-detail/member-detail.component';
 import { MemberEditComponent } from './components/members/member-edit/member-edit.component';
 import { PhotoEditorComponent } from './components/members/photo-editor/photo-editor.component';
-import { ListResolver } from './resolvers/lists.resolver';
+import { MemberMessagesComponent } from './components/members/member-messages/member-messages.component';
+
 
 
 export function tokenGetter() {
@@ -56,7 +59,8 @@ export function tokenGetter() {
     MemberDetailComponent,
     MemberEditComponent,
     PhotoEditorComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    MemberMessagesComponent
   ],
   imports: [
     BrowserModule,
@@ -90,6 +94,7 @@ export function tokenGetter() {
     MemberListResolver,
     MemberEditResolver,
     ListResolver,
+    MessagesResolver,
     UserService
   ],
   bootstrap: [AppComponent]
